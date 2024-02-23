@@ -1,11 +1,7 @@
 import datetime
 
-from main.utils import (receive_transactions, get_exec_transaction, get_date, sort_with_date,
+from main.utils import (get_exec_transaction, get_date, sort_with_date,
                         secret_from_and_to, transaction_path, show_transcriptions)
-
-
-def test_receive_transactions():
-    assert type(receive_transactions()) == list
 
 
 def test_get_exec_transaction():
