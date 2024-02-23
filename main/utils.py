@@ -4,13 +4,13 @@ from datetime import date
 
 
 def receive_transactions():
-    """Получает список всех транзакций из файла json"""
+    """Возвращает список всех транзакций из файла json"""
     with open(os.path.join("..", "operations.json")) as file:
         transaction = json.load(file)
     return transaction
 
 
-def get_exec_transcriptions(transaction_list: list):
+def get_exec_transaction(transaction_list: list):
     """Возвращает список проведенных транзакций"""
     exec_transaction = []
     for i in transaction_list:
@@ -39,7 +39,7 @@ def secret_from_and_to(data: str):
     if operation_name == 'Счет':
         operation_data = "**" + operation_data[-4:]
     else:
-        operation_data = "".join(operation_data[:4] + " " + operation_data[5:7]
+        operation_data = "".join(operation_data[:4] + " " + operation_data[4:6]
                                  + "**" + " " + "*" * 4 + " " + operation_data[-4:])
     masked_number = "".join(operation_name + " " + operation_data)
     return masked_number
@@ -60,10 +60,27 @@ def transaction_path(transaction: dict):
 
 def show_transcriptions(transaction: dict):
     """Выводит информацию об транзакции"""
-    date_transaction = get_date(transaction['date'])
+    date_transaction = date.strftime(get_date(transaction['date']), '%d.%m.%Y')
     description = transaction['description']
     path_transaction = transaction_path(transaction)
     amounts = transaction['operationAmount']['amount'] + ' ' + transaction['operationAmount']['currency']['name']
     return (f"{date_transaction} {description}\n"
             f"{path_transaction}\n"
             f"{amounts}\n")
+
+
+print(show_transcriptions({
+    "id": 441945886,
+    "state": "EXECUTED",
+    "date": "2019-08-26T10:50:58.294041",
+    "operationAmount": {
+        "amount": "31957.58",
+        "currency": {
+            "name": "руб.",
+            "code": "RUB"
+        }
+    },
+    "description": "Перевод организации",
+    "from": "Maestro 1596837868705199",
+    "to": "Счет 64686473678894779589"
+}))
